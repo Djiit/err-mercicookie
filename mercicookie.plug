@@ -1,0 +1,9 @@
+[Core]
+name = MerciCookie
+module = mercicookie
+
+[Documentation]
+description = Basic MerciCookie API Err integration
+
+[Python]
+version = 3
