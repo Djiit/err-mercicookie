@@ -4,9 +4,7 @@ from __future__ import (absolute_import, division,
 
 from itertools import chain
 from os import environ
-import urllib.parse
 import logging
-import json
 
 try:
     from http import client
@@ -52,7 +50,7 @@ class MerciCookie(BotPlugin):
     @botcmd(split_args_with=';')
     def order(self, message, args):
         """
-        Order cookies right from your chat. Choose between 6, 12 or 16-cookies packs.
+        Order cookies right from your chat. Choose between 6, 12 or 16 cookies packs.
         """
         if len(args) != 4 or ';' not in str(message):
             return 'Oops, Did you ask me something? Try something like this: !order 6; Jean Dupont, 42 Rue de Londres, Paris; 0123456789; Enjoy these cookies xoxo'
@@ -60,20 +58,21 @@ class MerciCookie(BotPlugin):
         if args[0] not in MERCICOOKIE_OFFERS_MAPPING.keys():
             return 'Oops! I can only order packs of 6, 12 or 16 cookies.'
 
-        data={
-            "recipient_address": args[1],
-            "recipient_phone_number": args[2],
-            "message": args[3],
-            "offer_id": MERCICOOKIE_OFFERS_MAPPING[args[0]]
-        }
-
-
         response = requests.post(
             f'{MERCICOOKIE_API_ROOT}/orders',
             headers={
                 'Authorization': f"Token token=\"{self.config['MERCICOOKIE_API_TOKEN']}\", \
                                          email=\"{self.config['MERCICOOKIE_API_EMAIL']}\""
             },
-            data={}
+            json={
+                "recipient_address": args[1],
+                "recipient_phone_number": args[2],
+                "message": args[3],
+                "offer_id": MERCICOOKIE_OFFERS_MAPPING[args[0]]
+            }
         )
-        return response.text
+
+        if reponse.status_code == 201:
+            return 'Yummy! Your cookies are on their way.'
+
+        return 'Err! Something went wrong :-('
