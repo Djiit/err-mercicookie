@@ -58,21 +58,24 @@ class MerciCookie(BotPlugin):
         if args[0] not in MERCICOOKIE_OFFERS_MAPPING.keys():
             return 'Oops! I can only order packs of 6, 12 or 16 cookies.'
 
-        response = requests.post(
-            f'{MERCICOOKIE_API_ROOT}/orders',
-            headers={
-                'Authorization': f"Token token=\"{self.config['MERCICOOKIE_API_TOKEN']}\", \
-                                         email=\"{self.config['MERCICOOKIE_API_EMAIL']}\""
-            },
-            json={
-                "recipient_address": args[1],
-                "recipient_phone_number": args[2],
-                "message": args[3],
-                "offer_id": MERCICOOKIE_OFFERS_MAPPING[args[0]]
-            }
-        )
+        try:
+            response = requests.post(
+                f'{MERCICOOKIE_API_ROOT}/orders',
+                headers={
+                    'Authorization': f"Token token=\"{self.config['MERCICOOKIE_API_TOKEN']}\", \
+                                             email=\"{self.config['MERCICOOKIE_API_EMAIL']}\""
+                },
+                json={
+                    "recipient_address": args[1],
+                    "recipient_phone_number": args[2],
+                    "message": args[3],
+                    "offer_id": MERCICOOKIE_OFFERS_MAPPING[args[0]]
+                }
+            )
+        except:  # FIXME: we might handle that better...
+            return 'Err! Something went wrong :-('
 
-        if reponse.status_code == 201:
+        if response.status_code == 201:
             return 'Yummy! Your cookies are on their way.'
 
         return 'Err! Something went wrong :-('

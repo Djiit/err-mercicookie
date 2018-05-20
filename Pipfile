@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 errbot = {extras = ["slack"]}
+slackclient = "*"
+
 
 
 [dev-packages]
