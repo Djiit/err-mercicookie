@@ -22,7 +22,7 @@ As admin of an errbot chatbot, send the following command over XMPP:
 
 ### Commands
 
-Use `!help MercieCookie` to see the available commands and their explanation.
+Use `!help MerciCookie` to see the available commands and their explanation.
 
 ## Configuration
 
